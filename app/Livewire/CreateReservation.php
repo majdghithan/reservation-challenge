@@ -22,19 +22,19 @@ class CreateReservation extends Component
     public int $total_price;
 
     #[Validate('required|string|min:3|max:100')]
-    public string $name = 'John Doe';
+    public string $name;
 
     #[Validate('required|email')]
-    public string $email = 'majd@gmail.com';
+    public string $email;
 
     #[Validate('required|string|min:3|max:255')]
-    public string $phone= '1234567890';
+    public string $phone;
 
     #[Validate('required|date|after:yesterday')]
-    public string $start_date = '01/10/2024';
+    public string $start_date;
 
     #[Validate('required|date|after:start_date')]
-    public string $end_date = '01/11/2024';
+    public string $end_date;
 
     #[Validate('required|integer|min:1')]
     public int $persons = 1;
@@ -63,10 +63,10 @@ class CreateReservation extends Component
         //assuming that the reservation is paid
         $data['is_paid'] = true;
 
-        $end_date = Carbon::parse($data['end_date'])->subDay()->format('Y-m-d');
-        $start_date = Carbon::parse($data['start_date'])->addDay()->format('Y-m-d');
+        $end_date = Carbon::parse($data['end_date'])->format('Y-m-d');
+        $start_date = Carbon::parse($data['start_date'])->format('Y-m-d');
 
-        $isAvailable = Reservation::where('room_id', $this->room->id)
+        $existed_reservations = Reservation::where('room_id', $this->room->id)
             ->where(function (Builder $query) use ($start_date, $end_date) {
                     $query->whereBetween('start_date', [$start_date, $end_date])
                         ->orWhereBetween('end_date', [$start_date, $end_date])
@@ -77,7 +77,10 @@ class CreateReservation extends Component
             })
             ->get();
 
-        dd($isAvailable);
+        if($existed_reservations->count() > 0){
+            $this->addError('start_date', 'This room is not available in this date range.');
+            return;
+        }
 
         if($data['season_id'] == null){
             $this->addError('start_date', 'This season is not available. Please contact the admin.');
