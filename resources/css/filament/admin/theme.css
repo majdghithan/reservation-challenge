@@ -1,0 +1,18 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+@media (min-width: 767px) {
+    body > div.fi-simple-layout.flex.min-h-screen.flex-col.items-center > div{
+        background-image: url('/public/images/register_bg.png');
+        @apply w-full bg-no-repeat;
+        background-size: cover;
+        --tw-bg-opacity: 1;
+        background-color: rgba(30, 41, 59, var(--tw-bg-opacity));
+    }
+}
+
+.fi-simple-main{
+    @apply bg-emerald-50;
+}
+
