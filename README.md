@@ -1,5 +1,17 @@
 ![ERD Diagram](/public/graph.png)
 
+## Users
+
+- Super Admin
+    - email:admin@majd.com
+    - password:password
+- Employee 1
+    - email:employee1@majd.com
+    - password:password
+- Employee 2
+    - email:employee2@majd.com
+    - password:password
+
 ## Assumptions
 
 - No need for an authenticated user to make reservation
